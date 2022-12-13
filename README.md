@@ -56,8 +56,34 @@ TESSERACT_PSM=1
 
 ## APIs
 ### Text from image url
+This API returns the text recognized from an image passed as url in the reqeust.
+The url to call is `/api/ocr/url`, using `POST` methond and passing the url into the body as `url` field. Example of body:
+```
+{
+    url: "http://google.it"
+}
+```
+The url passed must refer to an image, otherwise the response will have status `400 - Bad Request`, reporting the error cause. If the request completes correctly, the response will have status `200 - OK` and the body will contain the recognized text.
+```
+{
+    "text": "Recognized text...\n"
+}
+````
 
 ### Text from image
+This API returns the text recognized from an image passed as file in the request.
+The url to call is `/api/ocr/image`, using `POST` methond and passing the file into the body as `image` field. Example of body:
+```
+{
+    image: [file]
+}
+```
+The url passed must refer to an image, otherwise the response will have status `400 - Bad Request`, reporting the error cause. If the request completes correctly, the response will have status `200 - OK` and the body will contain the recognized text.
+```
+{
+    "text": "Recognized text...\n"
+}
+```
 
 ### Livingness
 The answer should be the string `I am alive` with HTTP code `200 - OK`.

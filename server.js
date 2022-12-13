@@ -134,8 +134,10 @@ app.post('/api/ocr/image',
                 });
             })
             .finally(() => {
-                // Remove the temporary file (ignore exceptions)
-                fs.rmSync(req.file.path, { force: true });
+                // Remove the temporary file
+                if (fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+                }
             });
     });
 
@@ -146,20 +148,20 @@ app.get('/api/ocr/living', async (req, res) => {
 
 // Readiness check
 app.get('/api/ocr/ready', async (req, res) => {
-    const expectedResult = 'Test\n';
+    const expectedResult = new RegExp('^Test.*');
     tesseract
         .recognize('./ocrtest.png', config)
         .then((text) => {
             // Compare the text with the expected result
-            if (text !== expectedResult) {
+            if (text.match(expectedResult)) {
+                res.status(200).json({
+                    status: 'I am ready',
+                    info: 'The OCR engine is working properly'
+                });
+            } else {
                 res.status(500).json({
                     status: 'I am not ready',
                     info: 'The recognized text is not the expected one'
-                });
-            } else {
-                res.status(200).json({
-                    status: 'I am not ready',
-                    info: 'The OCR engine is working properly'
                 });
             }
         })
