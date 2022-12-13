@@ -71,7 +71,7 @@ The url passed must refer to an image, otherwise the response will have status `
 ````
 
 ### Text from image
-This API returns the text recognized from an image passed as file in the reqeust.
+This API returns the text recognized from an image passed as file in the request.
 The url to call is `/api/ocr/image`, using `POST` methond and passing the file into the body as `image` field. Example of body:
 ```
 {
